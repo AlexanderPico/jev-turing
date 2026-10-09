@@ -1,0 +1,13 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.DS_Store
+/out/
+
+# soundtrack intermediate (regenerate: python -m jev_turing.media_ad)
+site/media/*.wav
+# unpacked raw logs (the .tar.gz is committed)
+raw-logs/jev-turing-raw-logs-*/
