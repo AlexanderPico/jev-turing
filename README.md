@@ -205,3 +205,8 @@ The recorded run (`runs/rule110-ether-p0.001-seed2.*`): ether background, 64 ste
 FakeJEV p=0.001, seed 2. It took 4,855 calls (3,959 tape + 896 background ring) and the
 checker counted 6 wrong cell updates, with 34 cells diverged from ground truth by the end.
 Re-running reproduces the cells and counters; the `latency_ms` values will differ.
+
+## Licence
+
+Code: MIT (see `LICENSE`). "Jev" and "TypeSafe AI" belong to TypeSafe AI; "ChatGPT" is a
+trademark of OpenAI. Neither is affiliated with or endorses this project.

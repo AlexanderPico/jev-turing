@@ -7,6 +7,7 @@ name = "jev-turing"
 version = "0.1.0"
 description = "JEV as a diode-like primitive: gates -> SR latch -> Rule 110 (offline, FakeJEV)"
 requires-python = ">=3.11"
+license = "MIT"
 dependencies = []
 
 [project.optional-dependencies]
