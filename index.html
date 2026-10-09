@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jev: the fine print, at a size you can read</title>
+<meta name="description" content="The real numbers behind a parody ad: 26,340 chained yes/no calls to an AI model, every one checked, 0 wrong. Replay every call.">
+<meta property="og:title" content="Jev: the fine print, at a size you can read">
+<meta property="og:description" content="26,340 chained AI decisions, every one checked, 0 wrong. Not a real ad. Replay every call.">
+<meta property="og:image" content="media/ad-jev-poster.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <p class="kicker">Not a real ad. Not sponsored.</p>
+  <h1>You saw the ad.<br>Here's the fine print, at a size you can read.</h1>
+  <p class="sub">I wired an AI model up as a logic gate and ran a tiny computer on it.
+  Every claim in the ad is real, and every caveat is below. Independent experiment; I have no affiliation with
+  TypeSafe AI (makers of Jev), Vercel, or OpenAI, and I paid for every call.</p>
+</header>
+
+<section class="hero" aria-labelledby="ad-h">
+  <h2 id="ad-h" class="vh">The ad</h2>
+  <video controls playsinline preload="metadata" poster="media/ad-jev-poster.png" src="media/ad-jev.mp4"
+         aria-label="Parody ad for Jev, 33 seconds, with sound and fine print at the end"></video>
+  <div class="fp">
+    <h2>The fine print</h2>
+    <ol class="fn-list">
+      <li><a href="#fn1"><b>Zero mistakes.</b></a> <span data-f="calls"></span> live calls, each checked by a separate program, <span data-f="wrong"></span> wrong.
+        That rules out an error rate above about 1 in <span data-f="bound_one_in"></span>; it doesn't prove it's zero.
+        <a href="#fn1">Replay every call</a>.</li>
+      <li><a href="#fn2"><b><span data-f="median_s"></span> s per decision.</b></a> Typical time for one call, 6 calls at a time.</li>
+      <li><a href="#fn2"><b><span data-f="min_conf_pct"></span>%+ sure, every time.</b></a> The least confident answer in the whole run. These are 3-bit yes/no questions, the easiest kind there is.</li>
+      <li><a href="#fn4"><b>Relative mistakes.</b></a> Compared with a simulated gate that is wrong 0.1% of the time (not an AI): <span data-f="fake_cells_off"></span> wrong cells after 64 steps vs <span data-f="live64_cells_off"></span>.</li>
+    </ol>
+    <p class="fp-more"><a href="#limits">What this does <em>not</em> show</a> · <a href="#question">The exact question sent</a> · ChatGPT scene: a dramatization; ChatGPT was not tested.</p>
+  </div>
+</section>
+
+<section id="limits" class="limits" aria-labelledby="lim-h">
+  <h2 id="lim-h">Read this before you repost</h2>
+  <ul>
+    <li><b>Plain code is far better at this.</b> The same 200 steps take Python about <span data-f="python_ms_r"></span> milliseconds, free.
+      The AI version took <span data-f="minutes_r"></span> minutes and cost $<span data-f="cost_r"></span>. The point is whether AI decisions can be chained thousands deep without one slipping, not speed.</li>
+    <li><b>Easiest possible questions.</b> Three on/off inputs, one yes/no answer. Real-world judgments are messier.</li>
+    <li><b>Wording matters.</b> Asking "under Wolfram's rule 110, is the cell on?" by name failed (one case wrong every time). The results hold only for the <a href="#question">wording quoted below</a>.</li>
+    <li><b>Zero errors is a bound, not a measurement.</b> See footnote 1.</li>
+    <li><b>Not a "universal computer".</b> Rule 110 is universal only with unlimited space; 200 steps on 224 cells is a demonstration.</li>
+  </ul>
+</section>
+
+<section id="fn1" aria-labelledby="fn1-h">
+  <h2 id="fn1-h"><span class="fnn">1</span> Every decision, replayed</h2>
+  <p class="sub" id="sub">Each pixel is one cell; each row is one tick of the computer. Every bright pixel after the first row was decided by one live call to the model.</p>
+  <div class="pick" id="pick" role="radiogroup" aria-label="Which recorded run"></div>
+  <p class="warn" id="disclaimer">Loading recorded run…</p>
+  <div class="replay">
+    <section class="stage">
+      <canvas id="spacetime" tabindex="0" aria-label="Rule 110 spacetime diagram, time runs downward. Click a cell to see the call that decided it."></canvas>
+      <div class="controls">
+        <button id="play" type="button">Pause</button>
+        <button id="restart" type="button">Restart</button>
+        <button id="skip" type="button">Skip to end</button>
+        <label>Speed <input id="speed" type="range" min="1" max="60" value="12"></label>
+      </div>
+      <p class="legend">
+        <span class="sw on"></span>on <span class="sw off"></span>off
+        <span class="sw dim"></span>repeating background (one call per pattern cell)
+        <span class="sw div"></span>differs from the correct answer
+        <span class="sw err"></span>wrong answer
+      </p>
+      <p class="hint"><b>Click any cell</b> to see exactly what was sent and what came back.</p>
+    </section>
+    <aside>
+      <div class="receipt" id="receipt" aria-live="polite">
+        <span class="k" id="r-k">Receipt</span>
+        <p id="r-empty"><span id="r-msg">Click a cell in the picture</span> (or <button type="button" id="r-random" class="linkish">pick one at random</button>).</p>
+        <div id="r-body" hidden>
+          <p class="r-where" id="r-where"></p>
+          <div class="lcr"><span id="r-l" class="cell"></span><span id="r-c" class="cell"></span><span id="r-r" class="cell"></span>
+            <span class="arrow">→</span><span id="r-a" class="cell"></span></div>
+          <p class="r-line"><span class="k">sent (state)</span><code id="r-state"></code></p>
+          <p class="r-line"><span class="k">model said</span><span id="r-p"></span></p>
+          <p class="r-line"><span class="k">correct answer</span><span id="r-v"></span></p>
+          <p class="r-line" id="r-lat-row"><span class="k">time</span><span id="r-lat"></span></p>
+          <details><summary>Full request</summary><pre id="r-payload"></pre></details>
+        </div>
+      </div>
+      <div class="counters">
+        <div><span class="k">tick</span><span id="c-step" class="v">0</span></div>
+        <div><span class="k" id="c-calls-k">calls</span><span id="c-calls" class="v">0</span></div>
+        <div><span class="k">wrong answers</span><span id="c-errors" class="v err-text">0</span></div>
+        <div><span class="k">cells off course</span><span id="c-div" class="v">0</span></div>
+      </div>
+      <h3>Call log <small>(latest first)</small></h3>
+      <ol id="log" reversed></ol>
+      <p class="meta" id="meta"></p>
+      <p><a id="download" download="recorded-run.json" href="#">Download this run (JSON)</a></p>
+    </aside>
+  </div>
+</section>
+
+<section id="fn2" aria-labelledby="fn2-h">
+  <h2 id="fn2-h"><span class="fnn">2</span><span class="fnn">3</span> Speed and confidence</h2>
+  <p class="sub">From the same <span data-f="calls"></span> calls. The model gives a probability, not just yes or no; the answer is "yes" when it's 50% or more.</p>
+  <div class="ev-grid two">
+    <figure>
+      <canvas id="hist" width="640" height="300" aria-label="Histogram of the model's probability that the cell is on, across all calls"></canvas>
+      <figcaption id="hist-cap">How sure the model was on every call. Nothing landed anywhere near the 50% line.</figcaption>
+    </figure>
+    <figure>
+      <canvas id="lat" width="640" height="300" aria-label="Histogram of time per call in milliseconds"></canvas>
+      <figcaption id="lat-cap">Time per call. Calls ran 6 at a time, so the run took about <span data-f="minutes_r"></span> minutes.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="fn4" aria-labelledby="fn4-h">
+  <h2 id="fn4-h"><span class="fnn">4</span> Why zero matters: mistakes spread</h2>
+  <p class="sub">In a computer like this, one wrong cell changes its neighbours on the next tick, and the damage grows.
+  Left: a simulated gate that's wrong 0.1% of the time (not an AI). Right: the live run. Same start, 64 ticks.
+  You can also replay the simulated run above with the "Simulated gate" button.</p>
+  <figure class="wide"><img src="media/real-vs-fake.png" alt="Side by side, 64 steps of Rule 110: a simulated gate with 0.1% random errors ends with 34 wrong cells; the live Jev run ends with 0."></figure>
+</section>
+
+<section id="pieces" aria-labelledby="pc-h">
+  <h2 id="pc-h">The smaller pieces (not in the ad)</h2>
+  <div class="ev-grid">
+    <figure><img src="media/how-it-works.png" alt="Diagram: three neighbour cells and the exact question sent to Jev; Jev answers 97% sure the cell is on, and a separate checker grades the answer."><figcaption>One cell = one question. The answer table is never sent.</figcaption></figure>
+    <figure><img src="media/nand-table.png" alt="NAND truth table: 1,000 of 1,000 correct for each of the four inputs, with Jev's confidence 0.98 to 0.99 for true and 0.01 to 0.02 for false."><figcaption>One call = one NAND gate (the building block of all logic): 4,000 of 4,000 right.</figcaption></figure>
+    <figure><img src="media/latch.png" alt="A stored bit shown across set, hold, reset and hold steps, from two AI NAND gates wired in a loop, with the 1,000-trial result."><figcaption>Two AI gates in a loop remember a bit: 1,000 of 1,000 trials held.</figcaption></figure>
+    <figure><img src="media/benchmark.png" alt="Python versus the AI on the same 200-step run: milliseconds and free versus 22 minutes and 43 cents; both 0 wrong."><figcaption>The honest comparison.</figcaption></figure>
+  </div>
+  <p class="sub">All live tests together: about 51,500 graded calls, 0 wrong, about 79¢.</p>
+</section>
+
+<section id="question" aria-labelledby="q-h">
+  <h2 id="q-h">The exact question sent</h2>
+  <p class="sub">Each call sends the three cells (for example <code>L=true; C=false; R=true</code>) and this question.
+  The answer table is never sent; the model works it out from the sentence each time.</p>
+  <blockquote id="q-text"></blockquote>
+  <dl class="crit"><dt>"true" means</dt><dd id="q-true"></dd><dt>"false" means</dt><dd id="q-false"></dd></dl>
+</section>
+
+<section id="ad-fine" aria-labelledby="af-h">
+  <h2 id="af-h">The ad's fine print, verbatim</h2>
+  <p class="verbatim" id="fine-print"></p>
+</section>
+
+<footer>
+  <p>Made by Alex Pico, independently. Jev (<code>typesafe-ai/jev</code>) is made by TypeSafe AI and was called through Vercel AI Gateway on 2026-10-09.
+  ChatGPT is a trademark of OpenAI. Nobody here endorsed this.</p>
+  <p>This page makes no network calls and no AI calls: it replays recorded runs stored with the page. Code, tests and the full raw logs: <!-- REPO LINK: fill in when the public repo exists --><span id="repo">repo link coming soon</span>.</p>
+</footer>
+<script src="data/ad-facts.js"></script>
+<script src="data/live-run.js"></script>
+<script src="data/recorded-run.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
