@@ -5,6 +5,8 @@
 Jev (`typesafe-ai/jev`) is a fast decision model made by TypeSafe AI and served here through
 Vercel AI Gateway: one question in, a probability of "true" out. This is an independent
 experiment; the author has no affiliation with TypeSafe AI or Vercel.
+**There's a Safety Dance meme.** [We can Jev if we want to](site/media/we-can-jev.png) / “We can leave your models behind.” [Source and reproduction notes](docs/memes/).
+
 **There's a parody ad.** `site/media/ad-jev.mp4` is a fake 33-second "paid ad" for Jev
 (not sponsored, not real); the site (`site/index.html`) is its fine print at readable
 size, with every call replayable. Every number in both is generated from the recorded runs
